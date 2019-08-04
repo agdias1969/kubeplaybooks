@@ -1,0 +1,59 @@
+--- # Install docker-ce
+- hosts: kube
+  user: ansible
+  become: yes
+  connection: ssh
+  gather_facts: no
+  tasks:
+    - name: update SO
+      yum:
+        name: '*'
+        state: latest
+
+    - name: Install yum-utils
+      yum: 
+        name: yum-utils
+        state: installed
+
+    - name: Install device-mapper
+      yum: 
+        name: device-mapper-persistent-data
+        state: installed
+    - name: Install lvm2
+      yum: 
+        name: lvm2
+        state: installed
+
+    - name: Add docker-ce repository
+      yum_repository:
+        name: docker-ce
+        baseurl: https://download.docker.com/linux/centos/7/$basearch/stable
+        description: docker-ce stable
+        enabled: true
+        gpgcheck: true
+        gpgkey: https://download.docker.com/linux/centos/gpg
+
+    - name: Install Docker CE Stable
+      yum:
+        name: docker-ce
+        state: installed
+    - name: Install docker-ce-cli
+      yum:
+        name: docker-ce-cli
+        state: installed
+    - name: install containerd.io
+      yum:
+        name: containerd.io
+        state: installed
+    - name: enable docker-ce
+      systemd:
+        name: docker
+        enabled: yes
+
+    - name: start docker-ce
+      systemd:
+        name: docker
+        state: started
+
+
+

@@ -1,0 +1,72 @@
+--- # Install Kubernetes
+-hosts: "{{ variable_host | default('kube')}}"
+ user: ansible
+ become: yes
+ connection: ssh
+ gather_facts: no
+ tasks:
+                            # Prepare hosts #
+
+
+# Control Plane Firewall Rules
+ - name: Add Kubernetes API Server Port
+   firewalld:
+     port: 6443/tcp
+     permanent: yes
+   tags: 
+     - control-plane
+    
+
+  - name: Add etcd server client API ports
+
+    firewalld:
+       port: 2379-2380
+      permanent: yes
+    tags:
+      - control-plane
+
+  - name: Add Kubelet API port
+    firewalld:
+      port: 10250
+      permanent:yes
+    tags:
+      - control-plane
+
+  - name: add Kube Scheduler Port
+
+    firewalld:
+       port: 10251
+       permanent: yes
+    tags:
+      - control-plane
+
+  - name: add Kube Controller Manager
+
+    firewalld:
+       port: 10252
+       permanent: yes
+    tags:
+      - control-plane
+
+
+# Worker Nodes
+
+- name: Kubelet API
+
+    firewalld:
+       port: 10250
+       permanent: yes
+    tags:
+      - worker-node
+
+- name: Node Port Services
+
+    firewalld:
+       port: 30000-32767
+       permanent: yes
+    tags:
+      -  worker-node
+
+  
+
+   

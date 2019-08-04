@@ -1,0 +1,23 @@
+--- # Install Kubernetes
+- hosts: worker-nodes
+  user: ansible
+  become: yes
+  connection: ssh
+  gather_facts: no
+  tasks:
+
+# Worker Nodes
+
+  #- name: Kubelet API
+  -  firewalld:
+      port: 10250
+      permanent: yes
+      state: enabled
+
+  #- name: Node Port Services
+  -  firewalld:
+      port: 30000-32767
+      permanent: yes
+      state: enabled
+
+   

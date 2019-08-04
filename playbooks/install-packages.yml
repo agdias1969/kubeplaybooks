@@ -1,0 +1,45 @@
+--- # Install Kubernetes
+- hosts: kube-cluster
+  user: ansible
+  become: yes
+  connection: ssh
+  gather_facts: no
+  tasks:
+  - name: Install Kubelet
+    yum:
+      name: kubelet
+      state: installed
+  - name: Install kubeadm
+    yum:
+      name: kubeadm
+      state: installed
+  - name: Install Kubectl
+    yum:
+      name: kubectl
+      state: installed
+  - name: set SELINUX in permissive mode 
+    selinux:
+      policy: targeted
+      state: permissive
+  - name: Enable kubelet service
+    systemd:
+      name: kubelet
+      state: started
+
+  - name: Set net.bridge.bridge-nf-call-ip6tables to 1
+    sysctl:
+      name: net.bridge.bridge-nf-call-ip6tables 
+      value: 1
+      sysctl_set: yes
+      reload: yes
+
+  - name: Set net.bridge.bridge-nf-call-iptables to 1
+    sysctl:
+      name: net.bridge.bridge-nf-call-iptables 
+      value: 1
+      sysctl_set: yes
+      reload: yes
+  
+  - name: disable swap
+    raw: /usr/sbin/swapoff -a
+    
