@@ -3,6 +3,17 @@ kind: PersistentVolumeClaim
 metadata:
   name: espvc
   namespace: elasticsearch
-  label:
-    app: elasticsearch
+spec:
+  accessMode: ReadWriteOnce
+  selector
+    matchLabels:
+      app: elasticsearch
+  volumeMode: Filesystem
+  resources:
+    requests:
+      storage: 8Gi
+  volumeName: espv
+      
+  
+  
   
