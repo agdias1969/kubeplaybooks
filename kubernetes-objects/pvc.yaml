@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: espvc
+  namespace: elasticsearch
+  label:
+    app: elasticsearch
+  
